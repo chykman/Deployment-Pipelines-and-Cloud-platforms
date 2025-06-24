@@ -25,11 +25,13 @@ Different deployment strategies include:
 * ![image](https://github.com/user-attachments/assets/2cf3e3a9-e288-46c3-8977-020479fbb243)
 
   
-## Deployin Applications to Cloud platform through GITACTIONS
+## Deploying Applications to Cloud platform through GITACTIONS
 
 * Choose a Cloud platform and create a server on it
 
   ![image](https://github.com/user-attachments/assets/53d106ee-dde5-4f8c-b1a8-fdd3f846a83b)
+
+* Create your Workflow file
 
 
 
