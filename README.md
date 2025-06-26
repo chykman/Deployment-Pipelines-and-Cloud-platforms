@@ -38,7 +38,32 @@ Different deployment strategies include:
 
 ## Configuring Deployment Environment
 
-* Setting up the Environment variables and secrets
+*  Go to AWS IAM management console Create ec2 manager profile
+  ![image](https://github.com/user-attachments/assets/7a49cf92-fd71-43b3-a9dd-47dfc1a12016)
+* Grant EC2 access
+![image](https://github.com/user-attachments/assets/c7d95c0c-b51f-44bf-af53-d8b6e68599c3)
+* Download your Access keys
+![image](https://github.com/user-attachments/assets/b2517488-c623-4590-996a-0f81165ba6a6)
+
+![image](https://github.com/user-attachments/assets/6862dcf0-1eac-41f1-9593-90741529c532)
+
+* Go to Github and store your Access keys under Secrets and Variable
+* ![image](https://github.com/user-attachments/assets/e7965e43-a0cf-4b3c-924c-396f9ab02030)
+
+* In repository Secrets , enter your Access key values
+  ![image](https://github.com/user-attachments/assets/592f08b8-7ae6-43d0-a3a8-d21dd6daa695)
+* Modify your workflow to deploy to AWS ec2 instance
+  ![image](https://github.com/user-attachments/assets/384d5dd9-5409-4c1a-a425-1aa498732304)
+
+  ![image](https://github.com/user-attachments/assets/020d892e-c860-47f9-9eb3-a0cf61e3b8f3)
+
+
+
+  
+
+
+
+
 
 
 
