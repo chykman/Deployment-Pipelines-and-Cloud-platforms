@@ -31,7 +31,15 @@ Different deployment strategies include:
 
   ![image](https://github.com/user-attachments/assets/53d106ee-dde5-4f8c-b1a8-fdd3f846a83b)
 
-* Create your Workflow file
+* Create your Workflow file , this deploys changes on the main branch to AWS 
+
+  ![image](https://github.com/user-attachments/assets/3022cf8c-d941-428b-b62e-68681e00585c)
+
+
+## Configuring Deployment Environment
+
+* Setting up the Environment variables and secrets
+
 
 
 
