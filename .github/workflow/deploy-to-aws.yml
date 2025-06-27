@@ -56,22 +56,21 @@ jobs:
           key: ./cicd.pem
           script: |
             echo "Creating systemd service file..."
-            sudo tee /etc/systemd/system/my-app.service > /dev/null <<'EOF'
-[Unit]
-Description=My Node.js App
-After=network.target
+              [Unit]
+              Description=My Node.js App
+              After=network.target
 
-[Service]
-User=ubuntu
-WorkingDirectory=/home/ubuntu/app
-ExecStart=/usr/bin/node /home/ubuntu/app/app.js
-Restart=always
-Environment=NODE_ENV=production
-Environment=PORT=3000
+              [Service]
+              User=ubuntu
+              WorkingDirectory=/home/ubuntu/app
+              ExecStart=/usr/bin/node /home/ubuntu/app/app.js
+              Restart=always
+              Environment=NODE_ENV=production
+              Environment=PORT=3000
 
-[Install]
-WantedBy=multi-user.target
-EOF
+              [Install]
+              WantedBy=multi-user.target
+              EOF
 
             sudo systemctl daemon-reexec
             sudo systemctl daemon-reload
