@@ -1,0 +1,19 @@
+{
+  "name": "deployment-pipelines-and-cloud-platforms",
+  "version": "1.0.0",
+  "description": "A deployment pipeline is a structured process used to deliver software from development to production. Its stages typically include:",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chykman/Deployment-Pipelines-and-Cloud-platforms.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chykman/Deployment-Pipelines-and-Cloud-platforms/issues"
+  },
+  "homepage": "https://github.com/chykman/Deployment-Pipelines-and-Cloud-platforms#readme"
+}

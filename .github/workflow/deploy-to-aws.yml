@@ -1,0 +1,108 @@
+name: Deploy to AWS
+
+on:
+  push:
+    branches:
+      - main
+  # This workflow triggers on a push to the 'main' branch.
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    # Specifies the runner environment.
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        # Checks out your repository under $GITHUB_WORKSPACE.
+
+      - name: Set up AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-north-1
+        # Configures AWS credentials from GitHub secrets.
+
+      - name: Start EC2 Instance
+        run: |
+          aws ec2 start-instances --instance-ids i-09b67317aa8d7c3db
+          aws ec2 wait instance-running --instance-ids i-09b67317aa8d7c3db
+        # Starts the EC2 instance and waits for it to be in a running state.
+
+      - name: Configure SSH
+        run: |
+          echo "${{ secrets.CICD_PRIVATE_KEY }}" > cicd.pem
+          chmod 600 cicd.pem
+        env:
+          CICD_PRIVATE_KEY: ${{ secrets.CICD_PRIVATE_KEY }}
+        # Stores the SSH private key from a GitHub secret.
+
+      - name: Deploy Code to EC2
+        uses: appleboy/scp-action@master
+        with:
+          host: ec2-13-48-44-201.eu-north-1.compute.amazonaws.com
+          username: ubuntu
+          key: ./cicd.pem
+          source: "."  # Deploy the entire repo; adjust to a specific folder if needed
+          target: "/home/ubuntu/app"
+        # Transfers the code to the EC2 instance.
+
+      - name: Configure systemd service on EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ec2-13-48-44-201.eu-north-1.compute.amazonaws.com
+          username: ubuntu
+          key: ./cicd.pem
+          script: |
+            echo "Creating systemd service file..."
+            sudo tee /etc/systemd/system/my-app.service > /dev/null <<'EOF'
+[Unit]
+Description=My Node.js App
+After=network.target
+
+[Service]
+User=ubuntu
+WorkingDirectory=/home/ubuntu/app
+ExecStart=/usr/bin/node /home/ubuntu/app/app.js
+Restart=always
+Environment=NODE_ENV=production
+Environment=PORT=3000
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+            sudo systemctl daemon-reexec
+            sudo systemctl daemon-reload
+            sudo systemctl enable my-app.service
+        # Creates the service file and enables the app to run as a background service.
+
+      - name: Execute Deployment Commands on EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ec2-13-48-44-201.eu-north-1.compute.amazonaws.com
+          username: ubuntu
+          key: ./cicd.pem
+          script: |
+            cd /home/ubuntu/app
+
+            # Install Node.js and npm if not already installed
+            if ! command -v node >/dev/null; then
+              echo "Installing Node.js..."
+              curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+              sudo apt-get install -y nodejs
+            fi
+
+            # Install app dependencies
+            echo "Installing dependencies..."
+            npm install
+
+            # Optional: Build the app (uncomment if needed)
+            # echo "Building the app..."
+            # npm run build
+
+            # Restart the Node.js service
+            echo "Restarting app service..."
+            sudo systemctl restart my-app.service
+        # Installs dependencies, builds (optional), and restarts the app.
